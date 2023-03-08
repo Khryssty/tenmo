@@ -92,6 +92,21 @@ public class ConsoleService {
         return printString;
     }
 
+    /*
+    * CG: added this method for viewPendingRequests
+    */
+    public void printPendingRequests(List<Transfer> transfers) {
+        System.out.println("------------------------------");
+        System.out.println("Pending Transfers");
+        System.out.println("ID\t\t\tTo\t\t\t\tAmount");
+        System.out.println("------------------------------");
+        for(Transfer transfer: transfers) {
+            System.out.println(formatTransfer(transfer));
+        }
+        System.out.println("------------------------------");
+
+    }
+
     public void printAvailableUsers(List<User> users) {
         System.out.println("------------------------------");
         System.out.println("Users");
