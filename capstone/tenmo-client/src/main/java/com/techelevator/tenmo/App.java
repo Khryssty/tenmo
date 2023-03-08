@@ -115,10 +115,22 @@ public class App {
       consoleService.printTransferDetails(transferToExamine);
    }
 
+   /* Christy
+   *
+   */
    private void viewPendingRequests() {
-      // TODO Auto-generated method stub
+      List<Transfer> transfers = transferService.viewPendingTransfers(currentUser.getUser().getId());
+      consoleService.printPendingRequests(transfers);
 
+      int getTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
    }
+
+   /* Christy
+   * approve/reject pending requests
+   */
+//   private void approveOrReject() {
+//
+//   }
 
    /**
     * Make a new sending transfer for the current user
