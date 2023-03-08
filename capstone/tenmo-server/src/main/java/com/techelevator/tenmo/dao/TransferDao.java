@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TransferDao {
 
-    List<Transfer> findAll();
+    List<Transfer> findAll(int id);
 
     Transfer getTransferById(int transfer_id);
 

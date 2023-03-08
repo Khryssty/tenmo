@@ -31,14 +31,14 @@ public class TransferController {
     }
 
 
-    /*
-    * TODO: Should this be under AccountController??
-    *  path = "/account/{id}/transfer
-    */
-
-    public List<Transfer> findAll() {
-
-        return null;
+    /**
+     * Gets all transfers to and from the given id
+     * @param id given id
+     * @return list of all transfers
+     */
+    @RequestMapping(path = "/{id}/account", method = RequestMethod.GET)
+    public List<Transfer> findAll(@PathVariable int id) {
+        return transferDao.findAll(id);
     }
 
     /*
