@@ -33,7 +33,7 @@ public class TransferService {
     */
    public List<Transfer> getAllTransfers(int userId) {
       Transfer[] transfers = null;
-      String url = baseUrl + "account/" + userId + "/transfer";
+      String url = baseUrl + "transfer/" + userId + "/account";
       try {
          ResponseEntity<Transfer[]> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Transfer[].class);
          transfers = response.getBody();
@@ -64,13 +64,17 @@ public class TransferService {
     * Created a new send transfer
     * @param transfer transfer to be sent
     */
-   public void sendTransfer(Transfer transfer) {
+   public Transfer sendTransfer(Transfer transfer) {
+      Transfer sentTransfer = null;
       String url = baseUrl + "transfer";
       try {
          //TODO Add post logic
+         ResponseEntity<Transfer> response = restTemplate.exchange(url, HttpMethod.POST, makeTransferEntity(transfer), Transfer.class);
+         sentTransfer = response.getBody();
       } catch (RestClientResponseException | ResourceAccessException e) {
          BasicLogger.log(e.getMessage());
       }
+      return sentTransfer;
    }
 
    /* Christy
@@ -78,7 +82,7 @@ public class TransferService {
    * @param userid
    */
    public List<Transfer> viewPendingTransfers(int userid) {
-      String url = baseUrl + "/transfer/account/" + userid;
+      String url = baseUrl + "transfer/account/" + userid;
       Transfer[] transfers = null;
       try {
          ResponseEntity<Transfer[]> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Transfer[].class);

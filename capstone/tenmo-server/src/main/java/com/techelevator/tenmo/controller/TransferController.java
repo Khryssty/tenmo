@@ -2,11 +2,8 @@ package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransferDao;
-import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,11 +22,9 @@ public class TransferController {
     private TransferDao transferDao;
     private AccountDao accountDao;
 
-
     public TransferController(TransferDao transferDao, AccountDao accountDao) {
         this.transferDao = transferDao;
     }
-
 
     /**
      * Gets all transfers to and from the given id
@@ -38,7 +33,12 @@ public class TransferController {
      */
     @RequestMapping(path = "/{id}/account", method = RequestMethod.GET)
     public List<Transfer> findAll(@PathVariable int id) {
-        return transferDao.findAll(id);
+        List<Transfer> transfers = transferDao.findAll(id);
+        if(transfers == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transfers for this account");
+        } else {
+            return transfers;
+        }
     }
 
     /*
@@ -105,6 +105,8 @@ public class TransferController {
         Transfer updatedTransfer = new Transfer();
         if (transfer.getTransfer_status_id() == APPROVED) {
             updatedTransfer = transferDao.approveTransfer(transfer, transfer_id);
+            //add and subtract
+            accountDao.updateBalances(updatedTransfer.getAccount_from(), updatedTransfer.getAccount_to(), updatedTransfer.getAmount());
         } else if (transfer.getTransfer_status_id() == REJECTED) {
             updatedTransfer = transferDao.rejectTransfer(transfer, transfer_id);
         }
