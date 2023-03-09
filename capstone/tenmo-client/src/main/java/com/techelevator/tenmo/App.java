@@ -108,7 +108,7 @@ public class App {
     */
    private void viewTransferHistory() {
       List<Transfer> transfers = transferService.getAllTransfers(currentUser.getUser().getId());
-      consoleService.printAllTransfers(transfers);
+      consoleService.printTransfers(transfers);
 
       int getTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
       Transfer transferToExamine = transferService.getTransferAtId(getTransferId);
@@ -120,57 +120,102 @@ public class App {
    */
    private void viewPendingRequests() {
       List<Transfer> transfers = transferService.viewPendingTransfers(currentUser.getUser().getId());
-      consoleService.printPendingRequests(transfers);
+      consoleService.printPendingTransfers(transfers);
 
-      int getTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
+      int pendingTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
+      approveOrReject();
    }
 
    /* Christy
    * approve/reject pending requests
    */
-//   private void approveOrReject() {
-//
-//   }
+   private void approveOrReject() {
+      consoleService.printApproveOrRejectMenu();
+      int input = consoleService.promptForInt("Please choose an option: ");
+      if(input >= 0 && input <= 2) {
+         //TODO approval and rejection logic
+      } else {
+         consoleService.printErrorMessage();
+         BasicLogger.log("Invalid menu selection");
+      }
+   }
 
    /**
     * Make a new sending transfer for the current user
     */
    private void sendBucks() {
-      // TODO COME BACK TO THIS
       List<User> users = accountService.getAllUsers();
-      consoleService.printAvailableUsers(users);
+      consoleService.printAvailableUsers(users, currentUser.getUser().getId());
+
       int selectedUser = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
       BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount:");
-      //transferAmount <= currentBalance
-      if (transferAmount.compareTo(accountService.getBalance(currentUser.getUser().getId())) <= 0) {
-         //TODO sendTransfer(): if in here -> transfer can be made
-         transferService.sendTransfer(makeSendTransfer(selectedUser, transferAmount));
+
+      if(inputIsValid(selectedUser, transferAmount)) {
+         transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.SEND_ID));
       } else {
          consoleService.printErrorMessage();
-         BasicLogger.log("Transfer amount is more than balance or ID is invalid");
+         BasicLogger.log("Transfer amount or ID is invalid");
       }
    }
 
+   /**
+    * Allows user to send a request for TE bucks to another user
+    */
    private void requestBucks() {
-      // TODO Auto-generated method stub
+      List<User> users = accountService.getAllUsers();
+      consoleService.printAvailableUsers(users, currentUser.getUser().getId());
 
+      int selectedUser = consoleService.promptForInt("Enter ID of user you are requesting from (0 to cancel):");
+      BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount:");
+      //if not current user AND amount > 0
+      if(selectedUser != currentUser.getUser().getId() && transferAmount.compareTo(new BigDecimal(0)) > 0) {
+         transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.REQUEST_ID));
+      } else {
+         consoleService.printErrorMessage();
+         BasicLogger.log("Transfer amount or ID is invalid");
+      }
    }
 
    /**
-    * Creates a new sending transfer
-    *
-    * @param selectedUser   user to send to
-    * @param transferAmount amount to send
-    * @return Transfer object
+    * Validates input for sending transfer
+    * @param selectedUser the id for the selected user
+    * @param transferAmount the amount to send
+    * @return true is selected user != current user AND amount is non-negative and less than balance
     */
-   private Transfer makeSendTransfer(int selectedUser, BigDecimal transferAmount) {
-      Transfer transfer = new Transfer();
-      transfer.setAccount_to(accountService.getAccountForUserId(selectedUser).getAccount_id());
-      transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
-      transfer.setAmount(transferAmount);
-      transfer.setTransfer_status_id(2);
-      transfer.setTransfer_type_id(2);
-      return transfer;
+   private boolean inputIsValid(int selectedUser, BigDecimal transferAmount) {
+      boolean valid = false;
+      if(transferAmount.compareTo(new BigDecimal(0)) > 0) {
+         if(transferAmount.compareTo(accountService.getBalance(currentUser.getUser().getId())) <= 0) {
+            if(selectedUser != currentUser.getUser().getId()) {
+               valid = true;
+            }
+         }
+      }
+      return valid;
    }
 
+   /**
+    * Creates a new transfer
+    *
+    * @param selectedUser   user to send or receive
+    * @param transferAmount amount to send or receive
+    * @param transferTypeId the type id for this transfer
+    * @return Transfer object
+    */
+   private Transfer makeTransfer(int selectedUser, BigDecimal transferAmount, int transferTypeId) {
+      Transfer transfer = new Transfer();
+      //if transfer type = 2 -> send
+      if(transferTypeId == TransferType.SEND_ID) { //SEND
+         transfer.setAccount_to(accountService.getAccountForUserId(selectedUser).getAccount_id());
+         transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
+         transfer.setTransfer_status_id(TransferStatus.APPROVED_ID);
+      } else { //REQUEST
+         transfer.setAccount_from(accountService.getAccountForUserId(selectedUser).getAccount_id());
+         transfer.setAccount_to(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
+         transfer.setTransfer_status_id(TransferStatus.PENDING_ID);
+      }
+      transfer.setTransfer_type_id(transferTypeId);
+      transfer.setAmount(transferAmount);
+      return transfer;
+   }
 }

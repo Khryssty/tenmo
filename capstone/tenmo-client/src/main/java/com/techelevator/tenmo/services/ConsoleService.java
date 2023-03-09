@@ -50,6 +50,14 @@ public class ConsoleService {
         System.out.println();
     }
 
+    public void printApproveOrRejectMenu() {
+        System.out.println();
+        System.out.println("1: Approve");
+        System.out.println("2: Reject");
+        System.out.println("3: Don't approve or reject");
+        System.out.println("------------------------------");
+    }
+
     /**
      * Prints the details for the given transfer
      * @param transfer transfer to print
@@ -67,10 +75,26 @@ public class ConsoleService {
         System.out.println(String.format("Amount: $%.2s", transfer.getAmount()));
     }
 
-    public void printAllTransfers(List<Transfer> transfers) {
+    /**
+     * Prints a list of transfers
+     * @param transfers list of transfers
+     * @param header Type of transfer list: "Transfers" or "Pending Transfers"
+     */
+    public void printTransfers(List<Transfer> transfers) {
         System.out.println("------------------------------");
         System.out.println("Transfers");
         System.out.println("ID\t\t\tFrom/To\t\t\t\tAmount");
+        System.out.println("------------------------------");
+        for(Transfer transfer: transfers) {
+            System.out.println(formatTransfer(transfer));
+        }
+        System.out.println("------------------------------");
+    }
+    //These might be able to be combined/simplified ^^^VVV
+    public void printPendingTransfers(List<Transfer> transfers) {
+        System.out.println("------------------------------");
+        System.out.println("Pending Transfers");
+        System.out.println("ID\t\t\t\tTo\t\t\t\tAmount");
         System.out.println("------------------------------");
         for(Transfer transfer: transfers) {
             System.out.println(formatTransfer(transfer));
@@ -92,28 +116,20 @@ public class ConsoleService {
         return printString;
     }
 
-    /*
-    * CG: added this method for viewPendingRequests
-    */
-    public void printPendingRequests(List<Transfer> transfers) {
-        System.out.println("------------------------------");
-        System.out.println("Pending Transfers");
-        System.out.println("ID\t\t\tTo\t\t\t\tAmount");
-        System.out.println("------------------------------");
-        for(Transfer transfer: transfers) {
-            System.out.println(formatTransfer(transfer));
-        }
-        System.out.println("------------------------------");
-
-    }
-
-    public void printAvailableUsers(List<User> users) {
+    /**
+     * Prints a list of all users with the current user excluded
+     * @param users
+     * @param currentUserId
+     */
+    public void printAvailableUsers(List<User> users, int currentUserId) {
         System.out.println("------------------------------");
         System.out.println("Users");
         System.out.println("ID\t\t\tName");
         System.out.println("------------------------------");
         for(User user: users) {
-            System.out.println(user.getId() + "\t\t\t" + user.getUsername());
+            if(user.getId() != currentUserId) {
+                System.out.println(user.getId() + "\t\t\t" + user.getUsername());
+            }
         }
         System.out.println("------------------------------");
     }
