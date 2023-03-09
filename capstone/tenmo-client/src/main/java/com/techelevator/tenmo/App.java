@@ -8,6 +8,7 @@ import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.util.BasicLogger;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class App {
@@ -108,7 +109,7 @@ public class App {
     */
    private void viewTransferHistory() {
       List<Transfer> transfers = transferService.getAllTransfers(currentUser.getUser().getId());
-      consoleService.printTransfers(transfers, accountService.getAccountForUserId(currentUser.getUser().getId()));
+      consoleService.printTransfers(getFormattedTransfers(transfers));
 
       int getTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
       Transfer transferToExamine = transferService.getTransferAtId(getTransferId);
@@ -122,17 +123,28 @@ public class App {
     * Prints all pending transfers and allows the user to approve or reject
     */
    private void viewPendingRequests() {
-      List<Transfer> transfers = transferService.viewPendingTransfers(currentUser.getUser().getId());
+      List<Transfer> transfers = transferService.viewPendingTransfers(
+              accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
       consoleService.printPendingTransfers(transfers);
 
       int pendingTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
       approveOrReject(pendingTransferId);
    }
 
-   private void loopTransferList(List<Transfer> transfers) {
+   private List<String> getFormattedTransfers(List<Transfer> transfers) {
+      List<String> formattedTransfers = new ArrayList<>();
       for(Transfer transfer: transfers) {
-         //consoleService.printTransferDetails();
+         //if type = send && account_from == currentUser:
+         if(transfer.getTransfer_type_id() == TransferType.SEND_ID &&
+            transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
+            String formattedString = " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
+            formattedTransfers.add(formattedString);
+         } else {
+            String formattedString = " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
+            formattedTransfers.add(formattedString);
+         }
       }
+      return formattedTransfers;
    }
 
    /**

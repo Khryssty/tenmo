@@ -90,20 +90,13 @@ public class ConsoleService {
      * @param transfers list of transfers
      * @param account current users account
      */
-    public void printTransfers(List<Transfer> transfers, Account account) {
+    public void printTransfers(List<String> transfers) {
         System.out.println("------------------------------");
         System.out.println("Transfers");
         System.out.println("ID\t\t\tFrom/To\t\t\t\tAmount");
         System.out.println("------------------------------");
-        for(Transfer transfer: transfers) {
-            String toFrom;
-            if(transfer.getTransfer_type_id() == TransferType.SEND_ID &&
-                    transfer.getAccount_from() == account.getAccount_id()) {
-                toFrom = " To:  " + transfer.getAccount_to(); //SENDING
-            } else {
-                toFrom = "From: " + transfer.getAccount_from(); //RECEIVING
-            }
-            System.out.println(formatTransfer(transfer, toFrom));
+        for(String transfer: transfers) {
+            System.out.println(transfer);
         }
         System.out.println("------------------------------");
     }

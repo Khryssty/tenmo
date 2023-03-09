@@ -81,8 +81,8 @@ public class TransferService {
    * 8. As an authenticated user of the system, I need to be able to see my *Pending* transfers.
    * @param userid
    */
-   public List<Transfer> viewPendingTransfers(int userid) {
-      String url = baseUrl + "transfer/account/" + userid;
+   public List<Transfer> viewPendingTransfers(int accountId) {
+      String url = baseUrl + "transfer/account/" + accountId;
       Transfer[] transfers = null;
       try {
          ResponseEntity<Transfer[]> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Transfer[].class);
