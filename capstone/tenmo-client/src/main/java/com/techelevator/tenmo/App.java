@@ -129,6 +129,12 @@ public class App {
       approveOrReject(pendingTransferId);
    }
 
+   private void loopTransferList(List<Transfer> transfers) {
+      for(Transfer transfer: transfers) {
+         //consoleService.printTransferDetails();
+      }
+   }
+
    /**
     * Lets the user approve or reject a pending transfer
     * @param pendingTransferId transferId
