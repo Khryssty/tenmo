@@ -105,7 +105,7 @@ public class TransferController {
 
 
     @RequestMapping(path = "/account/{id}", method = RequestMethod.PUT)
-    public Transfer approveOrRejectTransfer(@RequestBody Transfer transfer, @PathVariable int id) {
+    public Transfer approveOrRejectTransfer(@Valid @RequestBody Transfer transfer, @PathVariable int id) {
         Transfer updatedTransfer = new Transfer();
         if (transfer.getTransfer_status_id() == APPROVED) {
             updatedTransfer = transferDao.approveTransfer(transfer, id);
