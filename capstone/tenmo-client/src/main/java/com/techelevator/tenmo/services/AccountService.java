@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.services;
 
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.util.BasicLogger;
 import org.springframework.http.HttpEntity;
@@ -45,6 +46,18 @@ public class AccountService {
       return Arrays.asList(users);
    }
 
+   public Account getAccountForUserId(int user_id) {
+      Account account = null;
+      String url = baseUrl + "account/" + user_id;
+      try {
+         ResponseEntity<Account> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Account.class);
+         account = response.getBody();
+      } catch (RestClientResponseException | ResourceAccessException e) {
+         BasicLogger.log(e.getMessage());
+      }
+      return account;
+   }
+
    /**
     * Get the balance for the current user
     * @param id current users ID
@@ -54,8 +67,8 @@ public class AccountService {
       BigDecimal balance = null;
       String url = baseUrl + "account/" + id;
       try {
-         ResponseEntity<BigDecimal> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), BigDecimal.class);
-         balance = response.getBody();
+         ResponseEntity<Account> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Account.class);
+         balance = response.getBody().getBalance();
       } catch (RestClientResponseException | ResourceAccessException e) {
          BasicLogger.log(e.getMessage());
       }

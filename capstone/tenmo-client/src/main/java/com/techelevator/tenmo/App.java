@@ -165,11 +165,11 @@ public class App {
     */
    private Transfer makeSendTransfer(int selectedUser, BigDecimal transferAmount) {
       Transfer transfer = new Transfer();
-      transfer.setAccount_to(selectedUser);
-      transfer.setAccount_from(currentUser.getUser().getId());
+      transfer.setAccount_to(accountService.getAccountForUserId(selectedUser).getAccount_id());
+      transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
       transfer.setAmount(transferAmount);
-      transfer.setTransferStatus(new TransferStatus(2, "Approved"));
-      transfer.setTransferType(new TransferType(2, "Send"));
+      transfer.setTransfer_status_id(2);
+      transfer.setTransfer_type_id(2);
       return transfer;
    }
 

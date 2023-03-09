@@ -22,8 +22,8 @@ public class JdbcAccoutDaoTests extends BaseDaoTests {
 
    @Test
    public void assert_view_balance_returns_correct_value() {
-      BigDecimal balance = sut.viewBalance(1001);
-      Assert.assertEquals(balance.doubleValue(),  account1.getBalance().doubleValue(), 0);
+      Account balance = sut.viewBalance(1001);
+      Assert.assertEquals(balance.getBalance().doubleValue(),  account1.getBalance().doubleValue(), 0);
    }
 
 }

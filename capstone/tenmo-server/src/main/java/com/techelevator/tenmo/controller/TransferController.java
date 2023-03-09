@@ -24,6 +24,7 @@ public class TransferController {
 
     public TransferController(TransferDao transferDao, AccountDao accountDao) {
         this.transferDao = transferDao;
+        this.accountDao = accountDao;
     }
 
     /**
@@ -68,10 +69,9 @@ public class TransferController {
     @RequestMapping(method = RequestMethod.POST)
     public Transfer sendTransfer(@RequestBody Transfer transfer) {
         Transfer createTransfer = new Transfer();
-
         if (transfer.getTransfer_status_id() == APPROVED) {
-            createTransfer = transferDao.sendTransfer(transfer, transfer.getAccount_from());
-            accountDao.updateBalances(transfer.getAccount_from(), transfer.getAccount_to(), transfer.getAmount());
+            createTransfer = transferDao.sendTransfer(transfer);
+            accountDao.updateBalances(transfer);
         } else if (transfer.getTransfer_status_id() == PENDING) {
             createTransfer = transferDao.requestTransfer(transfer, transfer.getAccount_to());
         }
@@ -106,7 +106,7 @@ public class TransferController {
         if (transfer.getTransfer_status_id() == APPROVED) {
             updatedTransfer = transferDao.approveTransfer(transfer, transfer_id);
             //add and subtract
-            accountDao.updateBalances(updatedTransfer.getAccount_from(), updatedTransfer.getAccount_to(), updatedTransfer.getAmount());
+            accountDao.updateBalances(transfer);
         } else if (transfer.getTransfer_status_id() == REJECTED) {
             updatedTransfer = transferDao.rejectTransfer(transfer, transfer_id);
         }

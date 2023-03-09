@@ -10,7 +10,7 @@ public interface TransferDao {
 
     Transfer getTransferById(int transfer_id);
 
-    Transfer sendTransfer(Transfer transfer, int user_id);
+    Transfer sendTransfer(Transfer transfer);
 
     Transfer requestTransfer(Transfer transfer, int user_id);
 

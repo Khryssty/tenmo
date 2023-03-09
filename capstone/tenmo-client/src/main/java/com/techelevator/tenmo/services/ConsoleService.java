@@ -62,8 +62,8 @@ public class ConsoleService {
         //TODO get names for accounts
         System.out.println("From: " + transfer.getAccount_from());
         System.out.println("To: " + transfer.getAccount_to());
-        System.out.println("Type: " + transfer.getTransferType().getTransfer_type_desc());
-        System.out.println("Status: " + transfer.getTransferStatus().getTransfer_status_desc());
+        System.out.println("Type: " + transfer.getTransfer_type_id()); //TODO should be text
+        System.out.println("Status: " + transfer.getTransfer_status_id()); //TODO should be text
         System.out.println(String.format("Amount: $%.2s", transfer.getAmount()));
     }
 

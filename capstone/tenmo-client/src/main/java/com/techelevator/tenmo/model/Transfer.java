@@ -6,9 +6,10 @@ import java.util.Objects;
 public class Transfer {
 
    private int transfer_id, account_from, account_to;
+   private int transfer_status_id, transfer_type_id;
    //These may need to be changed to ID
-   private TransferStatus transferStatus;
-   private TransferType transferType;
+//   private TransferStatus transferStatus;
+//   private TransferType transferType;
    private BigDecimal amount;
 
    @Override
@@ -17,8 +18,8 @@ public class Transfer {
               "transfer_id=" + transfer_id +
               ", account_from=" + account_from +
               ", account_to=" + account_to +
-              ", transferStatus=" + transferStatus +
-              ", transferType=" + transferType +
+              ", transfer_status_id=" + transfer_status_id +
+              ", transfer_type_id=" + transfer_type_id +
               ", amount=" + amount +
               '}';
    }
@@ -28,12 +29,12 @@ public class Transfer {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       Transfer transfer = (Transfer) o;
-      return transfer_id == transfer.transfer_id && account_from == transfer.account_from && account_to == transfer.account_to && transferStatus.equals(transfer.transferStatus) && transferType.equals(transfer.transferType) && amount.equals(transfer.amount);
+      return transfer_id == transfer.transfer_id && account_from == transfer.account_from && account_to == transfer.account_to && transfer_status_id == transfer.transfer_status_id && transfer_type_id == transfer.transfer_type_id && amount.equals(transfer.amount);
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(transfer_id, account_from, account_to, transferStatus, transferType, amount);
+      return Objects.hash(transfer_id, account_from, account_to, transfer_status_id, transfer_type_id, amount);
    }
 
    public int getTransfer_id() {
@@ -60,20 +61,20 @@ public class Transfer {
       this.account_to = account_to;
    }
 
-   public TransferStatus getTransferStatus() {
-      return transferStatus;
+   public int getTransfer_status_id() {
+      return transfer_status_id;
    }
 
-   public void setTransferStatus(TransferStatus transferStatus) {
-      this.transferStatus = transferStatus;
+   public void setTransfer_status_id(int transfer_status_id) {
+      this.transfer_status_id = transfer_status_id;
    }
 
-   public TransferType getTransferType() {
-      return transferType;
+   public int getTransfer_type_id() {
+      return transfer_type_id;
    }
 
-   public void setTransferType(TransferType transferType) {
-      this.transferType = transferType;
+   public void setTransfer_type_id(int transfer_type_id) {
+      this.transfer_type_id = transfer_type_id;
    }
 
    public BigDecimal getAmount() {
