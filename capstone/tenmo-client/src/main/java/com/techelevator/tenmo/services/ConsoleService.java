@@ -48,10 +48,10 @@ public class ConsoleService {
     }
 
     public void printApproveOrRejectMenu() {
-        System.out.println();
+        System.out.println("------------------------------");
         System.out.println("1: Approve");
         System.out.println("2: Reject");
-        System.out.println("3: Don't approve or reject");
+        System.out.println("0: Don't approve or reject");
         System.out.println("------------------------------");
     }
 
@@ -88,39 +88,16 @@ public class ConsoleService {
     /**
      * Prints a list of transfers
      * @param transfers list of transfers
-     * @param account current users account
      */
-    public void printTransfers(List<String> transfers) {
+    public void printTransfers(List<String> transfers, String header, String location) {
         System.out.println("------------------------------");
-        System.out.println("Transfers");
-        System.out.println("ID\t\t\tFrom/To\t\t\t\tAmount");
+        System.out.println(header);
+        System.out.println("ID\t\t\t" + location + "\t\t\tAmount");
         System.out.println("------------------------------");
         for(String transfer: transfers) {
             System.out.println(transfer);
         }
         System.out.println("------------------------------");
-    }
-    //These might be able to be combined/simplified ^^^VVV
-    public void printPendingTransfers(List<Transfer> transfers) {
-        System.out.println("------------------------------");
-        System.out.println("Pending Transfers");
-        System.out.println("ID\t\t\t\tTo\t\t\t\tAmount");
-        System.out.println("------------------------------");
-        for(Transfer transfer: transfers) {
-            System.out.println(formatTransfer(transfer, " To:  " + transfer.getAccount_to()));
-        }
-        System.out.println("------------------------------");
-    }
-
-    /**
-     * formats the transfer for printing to the transfer list
-     * @param transfer transfer to be formatted
-     * @return formatted transfer
-     */
-    public String formatTransfer(Transfer transfer, String toFrom) {
-        //TODO get names for accounts based on send or receive
-        return String.format("%s\t\t%s\t\t$ %.2f",
-                transfer.getTransfer_id(), toFrom, transfer.getAmount());
     }
 
     /**

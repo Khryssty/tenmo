@@ -109,7 +109,7 @@ public class App {
     */
    private void viewTransferHistory() {
       List<Transfer> transfers = transferService.getAllTransfers(currentUser.getUser().getId());
-      consoleService.printTransfers(getFormattedTransfers(transfers));
+      consoleService.printTransfers(getFormattedTransfers(transfers), "Transfers", "To/From");
 
       int getTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
       Transfer transferToExamine = transferService.getTransferAtId(getTransferId);
@@ -125,9 +125,13 @@ public class App {
    private void viewPendingRequests() {
       List<Transfer> transfers = transferService.viewPendingTransfers(
               accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
-      consoleService.printPendingTransfers(transfers);
+      consoleService.printTransfers(getFormattedTransfers(transfers), "Pending Transfers", "To");
 
       int pendingTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
+      //TODO check validity
+      Transfer pendingTransfer = transferService.getTransferAtId(pendingTransferId);
+      consoleService.printTransferDetails(pendingTransfer,
+              accountService.getUsernameByAccountId(pendingTransfer.getAccount_from()), accountService.getUsernameByAccountId(pendingTransfer.getAccount_to()) );
       approveOrReject(pendingTransferId);
    }
 
@@ -136,11 +140,16 @@ public class App {
       for(Transfer transfer: transfers) {
          String formattedString = transfer.getTransfer_id() + "\t\t";
          //if type = send && account_from == currentUser:
-         if(transfer.getTransfer_type_id() == TransferType.SEND_ID &&
-               transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
-            formattedString += " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
+         if(transfer.getTransfer_type_id() == TransferType.SEND_ID) {
+            if(transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
+               formattedString += " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
+            } else {
+               formattedString += "From: " + accountService.getUsernameByAccountId(transfer.getAccount_from());
+            }
+         } else if(transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()){
+            formattedString += "To: " + accountService.getUsernameByAccountId(transfer.getAccount_to());
          } else {
-            formattedString += "From: " + accountService.getUsernameByAccountId(transfer.getAccount_from());
+            continue;
          }
          formattedString += "\t\t" + transfer.getAmount();
          formattedTransfers.add(formattedString);
@@ -233,8 +242,8 @@ public class App {
          transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
          transfer.setTransfer_status_id(TransferStatus.APPROVED_ID);
       } else { //REQUEST
-         transfer.setAccount_from(accountService.getAccountForUserId(selectedUser).getAccount_id());
-         transfer.setAccount_to(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
+         transfer.setAccount_to(accountService.getAccountForUserId(selectedUser).getAccount_id());
+         transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
          transfer.setTransfer_status_id(TransferStatus.PENDING_ID);
       }
       transfer.setTransfer_type_id(transferTypeId);
