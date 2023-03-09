@@ -46,6 +46,18 @@ public class AccountService {
       return Arrays.asList(users);
    }
 
+   public String getUsernameByAccountId(int id) {
+      String username = null;
+      String url = baseUrl + "users/account/" + id;
+      try {
+         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), String.class);
+         username = response.getBody();
+      } catch (RestClientResponseException | ResourceAccessException e) {
+         BasicLogger.log(e.getMessage());
+      }
+      return username;
+   }
+
    public Account getAccountForUserId(int user_id) {
       Account account = null;
       String url = baseUrl + "account/" + user_id;

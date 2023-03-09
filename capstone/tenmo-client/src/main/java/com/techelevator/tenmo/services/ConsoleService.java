@@ -59,17 +59,30 @@ public class ConsoleService {
      * Prints the details for the given transfer
      * @param transfer transfer to print
      */
-    public void printTransferDetails(Transfer transfer) {
+    public void printTransferDetails(Transfer transfer, String fromUsername, String toUsername) {
         System.out.println("------------------------------");
         System.out.println("Transfer Details");
         System.out.println("------------------------------");
         System.out.println("ID: " + transfer.getTransfer_id());
-        //TODO get names for accounts
-        System.out.println("From: " + transfer.getAccount_from());
-        System.out.println("To: " + transfer.getAccount_to());
-        System.out.println("Type: " + transfer.getTransfer_type_id()); //TODO should be text
-        System.out.println("Status: " + transfer.getTransfer_status_id()); //TODO should be text
-        System.out.println(String.format("Amount: $%.2s", transfer.getAmount()));
+        System.out.println("From: " + fromUsername);
+        System.out.println("To: " + toUsername);
+        printTypeAndStatus(transfer);
+        System.out.println(String.format("Amount: $%.2f", transfer.getAmount()));
+    }
+
+    public void printTypeAndStatus(Transfer transfer) {
+        if(transfer.getTransfer_type_id() == TransferType.SEND_ID) {
+            System.out.println("Type: Send");
+        } else {
+            System.out.println("Type: Request");
+        }
+        if(transfer.getTransfer_status_id() == TransferStatus.PENDING_ID) {
+            System.out.println("Status: Pending");
+        } else if(transfer.getTransfer_status_id() == TransferStatus.APPROVED_ID) {
+            System.out.println("Status: Approved");
+        } else {
+            System.out.println("Status: Rejected");
+        }
     }
 
     /**
@@ -83,14 +96,14 @@ public class ConsoleService {
         System.out.println("ID\t\t\tFrom/To\t\t\t\tAmount");
         System.out.println("------------------------------");
         for(Transfer transfer: transfers) {
+            String toFrom;
             if(transfer.getTransfer_type_id() == TransferType.SEND_ID &&
                     transfer.getAccount_from() == account.getAccount_id()) {
-                //SENDING
-                System.out.println(formatTransfer(transfer, " To:  " + transfer.getAccount_to()));
+                toFrom = " To:  " + transfer.getAccount_to(); //SENDING
             } else {
-                //RECEIVING
-                System.out.println(formatTransfer(transfer, "From: " + transfer.getAccount_from()));
+                toFrom = "From: " + transfer.getAccount_from(); //RECEIVING
             }
+            System.out.println(formatTransfer(transfer, toFrom));
         }
         System.out.println("------------------------------");
     }
