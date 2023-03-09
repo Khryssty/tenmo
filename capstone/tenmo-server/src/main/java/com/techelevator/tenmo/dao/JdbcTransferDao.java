@@ -23,11 +23,11 @@ public class JdbcTransferDao implements TransferDao{
     public List<Transfer> findAll(int id) {
         List<Transfer> transfers = new ArrayList<>();
 
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
-                "FROM transfer t JOIN account a ON t.account_from = a.account_id " +
-                "JOIN tenmo_user tu ON a.account_id = tu.account_id " +
-                "WHERE account_from = ? OR account_to = ?;";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, id, id);
+        String sql = "SELECT t.transfer_id, t.transfer_type_id, t.transfer_status_id, t.account_from, t.account_to, t.amount " +
+                "FROM transfer t " +
+                "JOIN account a ON t.account_to = a.account_id OR t.account_from = a.account_id " +
+                "JOIN tenmo_user tu ON a.user_id = tu.user_id WHERE tu.user_id = ?;";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, id);
         while(rowSet.next()) {
             transfers.add(mapRowToTransfer(rowSet));
         }
