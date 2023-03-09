@@ -77,7 +77,7 @@ public class TransferController {
             createTransfer = transferDao.sendTransfer(transfer);
             accountDao.updateBalances(transfer);
         } else if (transfer.getTransfer_type_id() == REQUEST) {
-            createTransfer = transferDao.requestTransfer(transfer, transfer.getAccount_to());
+            createTransfer = transferDao.sendTransfer(transfer);
         }
         return createTransfer;
     }
