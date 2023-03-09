@@ -112,24 +112,28 @@ public class App {
 
       int getTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
       Transfer transferToExamine = transferService.getTransferAtId(getTransferId);
-      consoleService.printTransferDetails(transferToExamine);
+
+      String toUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_from());
+      String fromUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_to());
+      consoleService.printTransferDetails(transferToExamine, toUsername, fromUsername);
    }
 
-   /* Christy
-   *
-   */
+   /**
+    * Prints all pending transfers and allows the user to approve or reject
+    */
    private void viewPendingRequests() {
       List<Transfer> transfers = transferService.viewPendingTransfers(currentUser.getUser().getId());
       consoleService.printPendingTransfers(transfers);
 
       int pendingTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
-      approveOrReject();
+      approveOrReject(pendingTransferId);
    }
 
-   /* Christy
-   * approve/reject pending requests
-   */
-   private void approveOrReject() {
+   /**
+    * Lets the user approve or reject a pending transfer
+    * @param pendingTransferId transferId
+    */
+   private void approveOrReject(int pendingTransferId) {
       consoleService.printApproveOrRejectMenu();
       int input = consoleService.promptForInt("Please choose an option: ");
       if(input >= 0 && input <= 2) {

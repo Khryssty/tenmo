@@ -23,7 +23,7 @@ public class AccountController {
    }
 
    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-   public Account getBalanceForId(@PathVariable int id) {
+   public Account getAccountForId(@PathVariable int id) {
       return accountDao.viewBalance(id);
    }
 
