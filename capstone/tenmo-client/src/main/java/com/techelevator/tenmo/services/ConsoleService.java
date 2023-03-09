@@ -64,7 +64,6 @@ public class ConsoleService {
         System.out.println("Transfer Details");
         System.out.println("------------------------------");
         System.out.println("ID: " + transfer.getTransfer_id());
-        //TODO get names for accounts
         System.out.println("From: " + fromUsername);
         System.out.println("To: " + toUsername);
         printTypeAndStatus(transfer);

@@ -113,9 +113,9 @@ public class App {
       int getTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
       Transfer transferToExamine = transferService.getTransferAtId(getTransferId);
 
-      String toUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_from());
-      String fromUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_to());
-      consoleService.printTransferDetails(transferToExamine, toUsername, fromUsername);
+      String toUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_to());
+      String fromUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_from());
+      consoleService.printTransferDetails(transferToExamine, fromUsername, toUsername);
    }
 
    /**
