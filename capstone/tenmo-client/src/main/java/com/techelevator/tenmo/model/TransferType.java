@@ -7,6 +7,9 @@ public class TransferType {
    private int transfer_id;
    private String transfer_type_desc;
 
+   public static final int REQUEST_ID = 1;
+   public static final int SEND_ID = 2;
+
    public TransferType(){}
    public TransferType(int transfer_id, String transfer_type_desc) {
       this.transfer_id = transfer_id;

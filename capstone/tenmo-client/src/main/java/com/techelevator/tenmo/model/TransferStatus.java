@@ -6,6 +6,10 @@ public class TransferStatus {
    private int transfer_status_id;
    private String transfer_status_desc;
 
+   public static final int PENDING_ID = 1;
+   public static final int APPROVED_ID = 2;
+   public static final int REJECTED_ID = 3;
+
    public TransferStatus(){}
    public TransferStatus(int transfer_status_id, String transfer_status_desc) {
       this.transfer_status_id = transfer_status_id;

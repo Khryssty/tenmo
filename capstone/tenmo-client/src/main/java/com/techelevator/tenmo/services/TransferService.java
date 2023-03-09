@@ -64,7 +64,7 @@ public class TransferService {
     * Created a new send transfer
     * @param transfer transfer to be sent
     */
-   public Transfer sendTransfer(Transfer transfer) {
+   public Transfer createTransfer(Transfer transfer) {
       Transfer sentTransfer = null;
       String url = baseUrl + "transfer";
       try {
