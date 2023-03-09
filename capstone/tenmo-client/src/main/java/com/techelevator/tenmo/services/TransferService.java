@@ -68,7 +68,6 @@ public class TransferService {
       Transfer sentTransfer = null;
       String url = baseUrl + "transfer";
       try {
-         //TODO Add post logic
          ResponseEntity<Transfer> response = restTemplate.exchange(url, HttpMethod.POST, makeTransferEntity(transfer), Transfer.class);
          sentTransfer = response.getBody();
       } catch (RestClientResponseException | ResourceAccessException e) {

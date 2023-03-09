@@ -70,23 +70,6 @@ public class AccountService {
       return account;
    }
 
-   /**
-    * Get the balance for the current user
-    * @param id current users ID
-    * @return the current users balance
-    */
-   public BigDecimal getBalance(int id) {
-      BigDecimal balance = null;
-      String url = baseUrl + "account/" + id;
-      try {
-         ResponseEntity<Account> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), Account.class);
-         balance = response.getBody().getBalance();
-      } catch (RestClientResponseException | ResourceAccessException e) {
-         BasicLogger.log(e.getMessage());
-      }
-      return balance;
-   }
-
    private HttpEntity<Void> makeAuthEntity() {
       HttpHeaders headers = new HttpHeaders();
       headers.setBearerAuth(token);

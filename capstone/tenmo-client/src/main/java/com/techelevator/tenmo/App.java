@@ -99,8 +99,8 @@ public class App {
     * Displays the balance for the current user
     */
    private void viewCurrentBalance() {
-      BigDecimal currentBalance = accountService.getBalance(currentUser.getUser().getId());
-      System.out.println(String.format("Your current account balance is: $%.2f", currentBalance));
+      Account currentAccount = accountService.getAccountForUserId(currentUser.getUser().getId());
+      System.out.println(String.format("Your current account balance is: $%.2f", currentAccount.getBalance()));
    }
 
    /**
@@ -217,7 +217,7 @@ public class App {
    private boolean inputIsValid(int selectedUser, BigDecimal transferAmount) {
       boolean valid = false;
       if(transferAmount.compareTo(new BigDecimal(0)) > 0) {
-         if(transferAmount.compareTo(accountService.getBalance(currentUser.getUser().getId())) <= 0) {
+         if(transferAmount.compareTo(accountService.getAccountForUserId(currentUser.getUser().getId()).getBalance()) <= 0) {
             if(selectedUser != currentUser.getUser().getId()) {
                valid = true;
             }
