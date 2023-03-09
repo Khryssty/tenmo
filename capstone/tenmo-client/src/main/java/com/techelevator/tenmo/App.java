@@ -108,7 +108,7 @@ public class App {
     */
    private void viewTransferHistory() {
       List<Transfer> transfers = transferService.getAllTransfers(currentUser.getUser().getId());
-      consoleService.printTransfers(transfers);
+      consoleService.printTransfers(transfers, accountService.getAccountForUserId(currentUser.getUser().getId()));
 
       int getTransferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
       Transfer transferToExamine = transferService.getTransferAtId(getTransferId);

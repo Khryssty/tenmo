@@ -1,10 +1,7 @@
 package com.techelevator.tenmo.services;
 
 
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -78,15 +75,22 @@ public class ConsoleService {
     /**
      * Prints a list of transfers
      * @param transfers list of transfers
-     * @param header Type of transfer list: "Transfers" or "Pending Transfers"
+     * @param account current users account
      */
-    public void printTransfers(List<Transfer> transfers) {
+    public void printTransfers(List<Transfer> transfers, Account account) {
         System.out.println("------------------------------");
         System.out.println("Transfers");
         System.out.println("ID\t\t\tFrom/To\t\t\t\tAmount");
         System.out.println("------------------------------");
         for(Transfer transfer: transfers) {
-            System.out.println(formatTransfer(transfer));
+            if(transfer.getTransfer_type_id() == TransferType.SEND_ID &&
+                    transfer.getAccount_from() == account.getAccount_id()) {
+                //SENDING
+                System.out.println(formatTransfer(transfer, " To:  " + transfer.getAccount_to()));
+            } else {
+                //RECEIVING
+                System.out.println(formatTransfer(transfer, "From: " + transfer.getAccount_from()));
+            }
         }
         System.out.println("------------------------------");
     }
@@ -97,7 +101,7 @@ public class ConsoleService {
         System.out.println("ID\t\t\t\tTo\t\t\t\tAmount");
         System.out.println("------------------------------");
         for(Transfer transfer: transfers) {
-            System.out.println(formatTransfer(transfer));
+            System.out.println(formatTransfer(transfer, " To:  " + transfer.getAccount_to()));
         }
         System.out.println("------------------------------");
     }
@@ -107,13 +111,10 @@ public class ConsoleService {
      * @param transfer transfer to be formatted
      * @return formatted transfer
      */
-    public String formatTransfer(Transfer transfer) {
+    public String formatTransfer(Transfer transfer, String toFrom) {
         //TODO get names for accounts based on send or receive
-        String toFrom = "Temp";
-        String otherUser = "Temp";
-        String printString = String.format("%s\t\t\t%s:%s\t\t\t$ %.2s",
-                transfer.getTransfer_id(), toFrom, otherUser, transfer.getAmount());
-        return printString;
+        return String.format("%s\t\t%s\t\t$ %.2f",
+                transfer.getTransfer_id(), toFrom, transfer.getAmount());
     }
 
     /**
