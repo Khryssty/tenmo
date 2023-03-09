@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import java.lang.ref.PhantomReference;
 import java.util.List;
 
 @RestController
@@ -19,6 +21,8 @@ public class TransferController {
     private static final int PENDING = 1;
     private static final int APPROVED = 2;
     private static final int REJECTED = 3;
+    private static final int REQUEST = 1;
+    private static final int SEND = 2;
     private TransferDao transferDao;
     private AccountDao accountDao;
 
@@ -48,8 +52,8 @@ public class TransferController {
     */
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public Transfer getTransferById(@PathVariable int transfer_id) {
-        Transfer transfer = transferDao.getTransferById(transfer_id);
+    public Transfer getTransferById(@PathVariable int id) {
+        Transfer transfer = transferDao.getTransferById(id);
         if(transfer == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transfer transaction cannot be found.");
         } else {
@@ -67,12 +71,12 @@ public class TransferController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST)
-    public Transfer sendTransfer(@RequestBody Transfer transfer) {
+    public Transfer sendTransfer(@Valid @RequestBody Transfer transfer) {
         Transfer createTransfer = new Transfer();
-        if (transfer.getTransfer_status_id() == APPROVED) {
+        if (transfer.getTransfer_type_id() == SEND) {
             createTransfer = transferDao.sendTransfer(transfer);
             accountDao.updateBalances(transfer);
-        } else if (transfer.getTransfer_status_id() == PENDING) {
+        } else if (transfer.getTransfer_type_id() == REQUEST) {
             createTransfer = transferDao.requestTransfer(transfer, transfer.getAccount_to());
         }
         return createTransfer;
@@ -84,8 +88,8 @@ public class TransferController {
     */
 
     @RequestMapping(path = "/account/{id}", method = RequestMethod.GET)
-    public List<Transfer> viewPendingTransfer (@PathVariable int user_id) {
-        List<Transfer> listOfPending = transferDao.viewPendingTransfers(user_id);
+    public List<Transfer> viewPendingTransfer (@PathVariable int id) {
+        List<Transfer> listOfPending = transferDao.viewPendingTransfers(id);
 
         if (listOfPending == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find transfer transactions that are pending.");
@@ -101,14 +105,14 @@ public class TransferController {
 
 
     @RequestMapping(path = "/account/{id}", method = RequestMethod.PUT)
-    public Transfer approveOrRejectTransfer(@RequestBody Transfer transfer, @PathVariable int transfer_id) {
+    public Transfer approveOrRejectTransfer(@RequestBody Transfer transfer, @PathVariable int id) {
         Transfer updatedTransfer = new Transfer();
         if (transfer.getTransfer_status_id() == APPROVED) {
-            updatedTransfer = transferDao.approveTransfer(transfer, transfer_id);
+            updatedTransfer = transferDao.approveTransfer(transfer, id);
             //add and subtract
             accountDao.updateBalances(transfer);
         } else if (transfer.getTransfer_status_id() == REJECTED) {
-            updatedTransfer = transferDao.rejectTransfer(transfer, transfer_id);
+            updatedTransfer = transferDao.rejectTransfer(transfer, id);
         }
         return updatedTransfer;
     }

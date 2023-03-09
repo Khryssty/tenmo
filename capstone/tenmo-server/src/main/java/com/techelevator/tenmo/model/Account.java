@@ -1,10 +1,12 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public class Account {
 
     private int account_id;
+    @NotBlank(message = "User id should not be blank")
     private int user_id;
     private BigDecimal balance;
 

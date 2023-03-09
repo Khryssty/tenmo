@@ -16,11 +16,16 @@ public class JdbcTransferDao implements TransferDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    /* TODO: Christy : need update
+    */
     @Override
     public List<Transfer> findAll(int id) {
         List<Transfer> transfers = new ArrayList<>();
+
         String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
-                "FROM transfer" +
+                "FROM transfer t JOIN account a ON t.account_from = a.account_id " +
+                "JOIN tenmo_user tu ON a.account_id = tu.account_id " +
                 "WHERE account_from = ? OR account_to = ?;";
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, id, id);
         while(rowSet.next()) {

@@ -1,14 +1,20 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class Transfer {
 
     private int transfer_id;
+    @NotNull(message = "Type of transfer should not be blank. Either 1 for SEND or 2 for REQUEST")
     private int transfer_type_id;
+    @NotNull(message = "Status of transfer should not be blank. 1 for PENDING or 2 for APPROVED or 3 for REJECTED")
     private int transfer_status_id;
+    @NotNull(message = "From account should not be blank")
     private int account_from;
+    @NotNull(message = "Destination account should not be blank")
     private int account_to;
+    @DecimalMin(value = "0", message = "Amount should be greater than 0")
     private BigDecimal amount;
 
     public Transfer() {
