@@ -49,7 +49,7 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     /*
-    * TODO: sending transfer will update account table. Should we create a separate method ot update accounts table and update transfercontroller
+    *
     */
     @Override
     public Transfer sendTransfer(Transfer transfer) {
@@ -61,7 +61,7 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     /*
-    * TODO: Review to make additional updates in accounts table?
+    * TODO: Should be deleted later. Request transfer uses the sendTransfer method
     */
     @Override
     public Transfer requestTransfer(Transfer transfer, int user_id) {
