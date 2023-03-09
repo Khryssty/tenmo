@@ -134,15 +134,16 @@ public class App {
    private List<String> getFormattedTransfers(List<Transfer> transfers) {
       List<String> formattedTransfers = new ArrayList<>();
       for(Transfer transfer: transfers) {
+         String formattedString = transfer.getTransfer_id() + "\t\t";
          //if type = send && account_from == currentUser:
          if(transfer.getTransfer_type_id() == TransferType.SEND_ID &&
-            transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
-            String formattedString = " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
-            formattedTransfers.add(formattedString);
+               transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
+            formattedString += " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
          } else {
-            String formattedString = " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
-            formattedTransfers.add(formattedString);
+            formattedString += "From: " + accountService.getUsernameByAccountId(transfer.getAccount_from());
          }
+         formattedString += "\t\t" + transfer.getAmount();
+         formattedTransfers.add(formattedString);
       }
       return formattedTransfers;
    }
