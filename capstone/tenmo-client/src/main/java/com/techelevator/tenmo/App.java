@@ -132,6 +132,12 @@ public class App {
       getTransferDetails(transfers, pendingTransferId, true);
    }
 
+   /**
+    * Business logic for displaying transfer details to the user
+    * @param transfers list of transfers
+    * @param transferDetailsId transfer to examine
+    * @param isPending if true -> allow user to approve or reject
+    */
    private void getTransferDetails(List<Transfer> transfers, int transferDetailsId, boolean isPending) {
       if(transferDetailsId != 0 && idIsInTransferList(transfers, transferDetailsId)) {
          Transfer transferToExamine = transferService.getTransferAtId(transferDetailsId);
@@ -170,6 +176,10 @@ public class App {
       transferService.updatePendingTransfer(transfer);
    }
 
+   /**
+    * Verifies that the user has enough balance and approves transfer if true
+    * @param transfer transfer to approve
+    */
    private void approveTransfer(Transfer transfer) {
       BigDecimal currentUserBalance = accountService.getAccountForUserId(currentUser.getUser().getId()).getBalance();
       if(transfer.getAmount().compareTo(currentUserBalance) <= 0) {
@@ -220,6 +230,11 @@ public class App {
       }
    }
 
+   /**
+    * Transforms a list of transfers into a list of formatted strings
+    * @param transfers transfer list to transform
+    * @return formatted transfers list
+    */
    private List<String> getFormattedTransfers(List<Transfer> transfers) {
       List<String> formattedTransfers = new ArrayList<>();
       for (Transfer transfer : transfers) {
@@ -229,6 +244,11 @@ public class App {
       return formattedTransfers;
    }
 
+   /**
+    * Formats the "To/From: Username" for a transfer
+    * @param transfer the transfer to format
+    * @return formatted string
+    */
    private String formatToFrom(Transfer transfer) {
       String formattedString = "";
       String toUsername = accountService.getUsernameByAccountId(transfer.getAccount_to());
@@ -267,6 +287,12 @@ public class App {
       return valid;
    }
 
+   /**
+    * Checks that the given id is in the list
+    * @param transfers list to check
+    * @param pendingTransferId id to search for
+    * @return true if list contains id
+    */
    private boolean idIsInTransferList(List<Transfer> transfers, int pendingTransferId) {
       for(Transfer transfer: transfers) {
          if(transfer.getTransfer_id() == pendingTransferId) {
