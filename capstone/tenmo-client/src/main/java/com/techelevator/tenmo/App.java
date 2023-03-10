@@ -87,11 +87,14 @@ public class App {
          } else if (menuSelection == 5) {
             requestBucks();
          } else if (menuSelection == 0) {
-            continue;
+            menuSelection = -1;
+            currentUser = null;
+            loginMenu();
          } else {
             System.out.println("Invalid Selection");
+            continue;
          }
-         consoleService.pause();
+         //consoleService.pause();
       }
    }
 
