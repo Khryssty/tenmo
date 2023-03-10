@@ -203,7 +203,7 @@ public class App {
 
       if(inputIsValid(selectedUser, transferAmount)) {
          transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.SEND_ID));
-         System.out.println("Successfully sent $ " + transferAmount + " to " + accountService.getUsernameByAccountId(accountService.getAccountForUserId(selectedUser).getAccount_id()));
+         System.out.println("Successfully sent $" + transferAmount + " to " + accountService.getUsernameByAccountId(accountService.getAccountForUserId(selectedUser).getAccount_id()));
       } else {
          consoleService.printErrorMessage();
          BasicLogger.log("Transfer amount or ID is invalid");
@@ -222,7 +222,7 @@ public class App {
       //if not current user AND amount > 0
       if(selectedUser != currentUser.getUser().getId() && transferAmount.compareTo(new BigDecimal(0)) > 0) {
          transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.REQUEST_ID));
-         System.out.println("Your request for transfer of $ " + transferAmount + " from " +
+         System.out.println("Your request for transfer of $" + transferAmount + " from " +
                  accountService.getUsernameByAccountId(accountService.getAccountForUserId(selectedUser).getAccount_id()) + " is successfully sent and pending for approval.");
       } else {
          consoleService.printErrorMessage();
