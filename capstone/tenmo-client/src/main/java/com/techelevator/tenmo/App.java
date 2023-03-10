@@ -47,6 +47,8 @@ public class App {
          } else if (menuSelection != 0) {
             System.out.println("Invalid Selection");
             consoleService.pause();
+         } else if (menuSelection == 0) {
+            System.exit(0);
          }
       }
    }
@@ -140,22 +142,26 @@ public class App {
 
    private List<String> getFormattedTransfers(List<Transfer> transfers) {
       List<String> formattedTransfers = new ArrayList<>();
-      for(Transfer transfer: transfers) {
+      for (Transfer transfer : transfers) {
          String formattedString = transfer.getTransfer_id() + "\t\t";
          //if type = send && account_from == currentUser:
-         if(transfer.getTransfer_type_id() == TransferType.SEND_ID) {
-            if(transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
+         if (transfer.getTransfer_type_id() == TransferType.SEND_ID) {
+            if (transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
                formattedString += " To:  " + accountService.getUsernameByAccountId(transfer.getAccount_to());
             } else {
                formattedString += "From: " + accountService.getUsernameByAccountId(transfer.getAccount_from());
             }
-         } else if(transfer.getAccount_from() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()){
-            formattedString += "To: " + accountService.getUsernameByAccountId(transfer.getAccount_to());
-         } else {
-            continue;
+         } else if (transfer.getTransfer_type_id() == TransferType.REQUEST_ID) {
+            if (transfer.getAccount_to() == accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id()) {
+               formattedString += "From: " + accountService.getUsernameByAccountId(transfer.getAccount_from());
+            } else {
+               formattedString += "To: " + accountService.getUsernameByAccountId(transfer.getAccount_to());
+            }
+
          }
          formattedString += "\t\t" + transfer.getAmount();
          formattedTransfers.add(formattedString);
+
       }
       return formattedTransfers;
    }
@@ -196,6 +202,7 @@ public class App {
 
       if(inputIsValid(selectedUser, transferAmount)) {
          transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.SEND_ID));
+         System.out.println("Successfully sent " + transferAmount + " to " + selectedUser);
       } else {
          consoleService.printErrorMessage();
          BasicLogger.log("Transfer amount or ID is invalid");
@@ -214,6 +221,7 @@ public class App {
       //if not current user AND amount > 0
       if(selectedUser != currentUser.getUser().getId() && transferAmount.compareTo(new BigDecimal(0)) > 0) {
          transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.REQUEST_ID));
+         System.out.println("Your request for transfer of " + transferAmount + " from " + selectedUser + " is successfully sent and pending for approval.");
       } else {
          consoleService.printErrorMessage();
          BasicLogger.log("Transfer amount or ID is invalid");
@@ -254,8 +262,8 @@ public class App {
          transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
          transfer.setTransfer_status_id(TransferStatus.APPROVED_ID);
       } else { //REQUEST
-         transfer.setAccount_to(accountService.getAccountForUserId(selectedUser).getAccount_id());
-         transfer.setAccount_from(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
+         transfer.setAccount_from(accountService.getAccountForUserId(selectedUser).getAccount_id());
+         transfer.setAccount_to(accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
          transfer.setTransfer_status_id(TransferStatus.PENDING_ID);
       }
       transfer.setTransfer_type_id(transferTypeId);
