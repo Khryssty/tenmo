@@ -76,6 +76,7 @@ public class App {
       while (menuSelection != 0) {
          accountService.setToken(currentUser.getToken());
          transferService.setToken(currentUser.getToken());
+         displayCurrentUser();
          consoleService.printMainMenu();
          menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
          if (menuSelection == 1) {
@@ -113,6 +114,7 @@ public class App {
     * Then allows the user to select a transfer to be shown more details
     */
    private void viewTransferHistory() {
+      displayCurrentUser();
       List<Transfer> transfers = transferService.getAllTransfers(currentUser.getUser().getId());
       consoleService.printTransfers(getFormattedTransfers(transfers), "Transfers", "To/From");
 
@@ -124,10 +126,10 @@ public class App {
     * Prints all pending transfers and allows the user to approve or reject
     */
    private void viewPendingRequests() {
+      displayCurrentUser();
       List<Transfer> transfers = transferService.viewPendingTransfers(
               accountService.getAccountForUserId(currentUser.getUser().getId()).getAccount_id());
       consoleService.printTransfers(getFormattedTransfers(transfers), "Pending Transfers", "To");
-
       int pendingTransferId = consoleService.promptForInt("Please enter transfer ID to approve/reject (0 to cancel): ");
       getTransferDetails(transfers, pendingTransferId, true);
    }
@@ -139,6 +141,7 @@ public class App {
     * @param isPending if true -> allow user to approve or reject
     */
    private void getTransferDetails(List<Transfer> transfers, int transferDetailsId, boolean isPending) {
+      displayCurrentUser();
       if(transferDetailsId != 0 && idIsInTransferList(transfers, transferDetailsId)) {
          Transfer transferToExamine = transferService.getTransferAtId(transferDetailsId);
          String toUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_to());
@@ -195,6 +198,7 @@ public class App {
     * Make a new sending transfer for the current user
     */
    private void sendBucks() {
+      displayCurrentUser();
       List<User> users = accountService.getAllUsers();
       consoleService.printAvailableUsers(users, currentUser.getUser().getId());
 
@@ -214,6 +218,7 @@ public class App {
     * Allows user to send a request for TE bucks to another user
     */
    private void requestBucks() {
+      displayCurrentUser();
       List<User> users = accountService.getAllUsers();
       consoleService.printAvailableUsers(users, currentUser.getUser().getId());
 
@@ -325,5 +330,9 @@ public class App {
       transfer.setTransfer_type_id(transferTypeId);
       transfer.setAmount(transferAmount);
       return transfer;
+   }
+
+   private void displayCurrentUser() {
+      System.out.println("\033[1;31mLOGGED IN USER: \033[0m\033[1m" + currentUser.getUser().getId() + " - " + currentUser.getUser().getUsername() + "\033[0m");
    }
 }
