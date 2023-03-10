@@ -38,7 +38,7 @@ public class TransferServiceImplementation implements TransferService{
         try {
             transfers = transferDao.findAll(id);
         } catch (NullPointerException  | EmptyStackException e) {
-            e.printStackTrace();
+            e.getCause();
         }
         return transfers;
     }
@@ -55,7 +55,7 @@ public class TransferServiceImplementation implements TransferService{
         try {
             transfer = transferDao.getTransferById(id);
         } catch (NullPointerException  | EmptyStackException e) {
-            e.printStackTrace();
+            e.getCause();
         }
 
         return transfer;
@@ -81,7 +81,7 @@ public class TransferServiceImplementation implements TransferService{
                 createTransfer = transferDao.sendTransfer(transfer);
             }
         } catch (NullPointerException  | EmptyStackException e) {
-            e.printStackTrace();
+            e.getCause();
         }
         return createTransfer;
     }
@@ -97,7 +97,7 @@ public class TransferServiceImplementation implements TransferService{
         try {
             listOfPending = transferDao.viewPendingTransfers(id);
         } catch (NullPointerException  | EmptyStackException e) {
-            e.printStackTrace();
+            e.getCause();
         }
 
         return listOfPending;
@@ -122,7 +122,7 @@ public class TransferServiceImplementation implements TransferService{
                 updatedTransfer = transferDao.rejectTransfer(transfer, id);
             }
         } catch (NullPointerException  | EmptyStackException e) {
-            e.printStackTrace();
+            e.getCause();
         }
         return updatedTransfer;
     }
