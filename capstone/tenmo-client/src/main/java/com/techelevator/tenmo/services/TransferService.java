@@ -97,8 +97,8 @@ public class TransferService {
    */
    public boolean updatePendingTransfer(Transfer updatedTransfer) {
       boolean isUpdated = false;
-      String url = baseUrl + "/transfer/account/" + updatedTransfer.getAccount_from();
-      Transfer transfer = null;
+      String url = baseUrl + "/transfer/" + updatedTransfer.getTransfer_id();
+      //Transfer transfer = null;
       try {
          restTemplate.put(url, makeTransferEntity(updatedTransfer));
          isUpdated = true;

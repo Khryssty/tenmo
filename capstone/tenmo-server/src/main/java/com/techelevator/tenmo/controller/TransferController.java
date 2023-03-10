@@ -104,7 +104,7 @@ public class TransferController {
     */
 
 
-    @RequestMapping(path = "/account/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public Transfer approveOrRejectTransfer(@Valid @RequestBody Transfer transfer, @PathVariable int id) {
         Transfer updatedTransfer = new Transfer();
         if (transfer.getTransfer_status_id() == APPROVED) {

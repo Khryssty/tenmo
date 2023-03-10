@@ -132,7 +132,7 @@ public class App {
       Transfer pendingTransfer = transferService.getTransferAtId(pendingTransferId);
       consoleService.printTransferDetails(pendingTransfer,
               accountService.getUsernameByAccountId(pendingTransfer.getAccount_from()), accountService.getUsernameByAccountId(pendingTransfer.getAccount_to()) );
-      approveOrReject(pendingTransferId);
+      approveOrReject(pendingTransfer);
    }
 
    private List<String> getFormattedTransfers(List<Transfer> transfers) {
@@ -161,11 +161,20 @@ public class App {
     * Lets the user approve or reject a pending transfer
     * @param pendingTransferId transferId
     */
-   private void approveOrReject(int pendingTransferId) {
+   private void approveOrReject(Transfer transfer) {
       consoleService.printApproveOrRejectMenu();
       int input = consoleService.promptForInt("Please choose an option: ");
       if(input >= 0 && input <= 2) {
-         //TODO approval and rejection logic
+         transfer.setTransfer_status_id(input + 1);
+         boolean isUpdated = transferService.updatePendingTransfer(transfer);
+         if (isUpdated == true) {
+            if (input == 1) {
+            System.out.println("Pending transfer is successfully approved.");
+         } else {
+               System.out.println("Pending transfer is successfully rejected.");
+            }
+            }
+
       } else {
          consoleService.printErrorMessage();
          BasicLogger.log("Invalid menu selection");
