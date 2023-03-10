@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.math.BigDecimal;
 
 public class JdbcAccoutDaoTests extends BaseDaoTests {
-   private Account account1 = new Account(2001, 1001, new BigDecimal(1000.00));
+   private Account account1 = new Account(2001, 1001, new BigDecimal("1000.00"));
 
    private JdbcAccountDao sut;
 
@@ -21,9 +21,15 @@ public class JdbcAccoutDaoTests extends BaseDaoTests {
    }
 
    @Test
-   public void assert_view_balance_returns_correct_value() {
-      Account balance = sut.viewBalance(1001);
-      Assert.assertEquals(balance.getBalance().doubleValue(),  account1.getBalance().doubleValue(), 0);
+   public void assert_get_account_returns_correct_value() {
+      Account balance = sut.getAccount(1001);
+      System.out.println(balance.toString());
+      Assert.assertTrue(balance == account1);
+   }
+
+   @Test
+   public void assert_view() {
+
    }
 
 }

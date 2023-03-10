@@ -17,7 +17,7 @@ public class JdbcAccountDao implements AccountDao{
     }
 
     @Override
-    public Account viewBalance(int user_id) {
+    public Account getAccount(int user_id) {
         SqlRowSet result = jdbcTemplate.queryForRowSet("SELECT account_id, user_id, balance from account WHERE user_id = ?", user_id);
         if(result.next()) {
             return mapRowToAccount(result);

@@ -168,26 +168,35 @@ public class App {
 
    /**
     * Lets the user approve or reject a pending transfer
-    * @param pendingTransferId transferId
+    * @param transfer transferId
     */
    private void approveOrReject(Transfer transfer) {
       consoleService.printApproveOrRejectMenu();
       int input = consoleService.promptForInt("Please choose an option: ");
-      if(input >= 0 && input <= 2) {
-         transfer.setTransfer_status_id(input + 1);
-         boolean isUpdated = transferService.updatePendingTransfer(transfer);
-         if (isUpdated == true) {
-            if (input == 1) {
-            System.out.println("Pending transfer is successfully approved.");
-         } else {
-               System.out.println("Pending transfer is successfully rejected.");
-            }
-            }
-
+      if(input == 0) {
+         //do nothing
+      } else if(input == 1) { //approve
+         BigDecimal currentUserBalance = accountService.getAccountForUserId(currentUser.getUser().getId()).getBalance();
+         if(transfer.getAmount().compareTo(currentUserBalance) <= 0) {
+            //valid
+         }
+      } else if(input == 2) {
+         //reject
       } else {
          consoleService.printErrorMessage();
          BasicLogger.log("Invalid menu selection");
       }
+
+
+         transfer.setTransfer_status_id(input + 1);
+         boolean isUpdated = transferService.updatePendingTransfer(transfer);
+         if (isUpdated == true) {
+            if (input == 1) {
+               System.out.println("Pending transfer is successfully approved.");
+            }
+         } else {
+               System.out.println("Pending transfer is successfully rejected.");
+         }
    }
 
    /**
