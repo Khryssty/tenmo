@@ -37,7 +37,6 @@ public class ConsoleService {
     }
 
     public void printMainMenu() {
-        System.out.println();
         System.out.println("1: View your current balance");
         System.out.println("2: View your past transfers");
         System.out.println("3: View your pending requests");

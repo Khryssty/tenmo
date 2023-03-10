@@ -205,7 +205,7 @@ public class App {
       int selectedUser = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
       BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount:");
 
-      if(inputIsValid(selectedUser, transferAmount)) {
+      if(inputIsValid(selectedUser, transferAmount) && idIsInUserList(users, selectedUser)) {
          transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.SEND_ID));
          System.out.println("Successfully sent $" + transferAmount + " to " + accountService.getUsernameByAccountId(accountService.getAccountForUserId(selectedUser).getAccount_id()));
       } else {
@@ -225,7 +225,7 @@ public class App {
       int selectedUser = consoleService.promptForInt("Enter ID of user you are requesting from (0 to cancel):");
       BigDecimal transferAmount = consoleService.promptForBigDecimal("Enter amount:");
       //if not current user AND amount > 0
-      if(selectedUser != currentUser.getUser().getId() && transferAmount.compareTo(new BigDecimal(0)) > 0) {
+      if(selectedUser != currentUser.getUser().getId() && transferAmount.compareTo(new BigDecimal(0)) > 0 && idIsInUserList(users, selectedUser)) {
          transferService.createTransfer(makeTransfer(selectedUser, transferAmount, TransferType.REQUEST_ID));
          System.out.println("Your request for transfer of $" + transferAmount + " from " +
                  accountService.getUsernameByAccountId(accountService.getAccountForUserId(selectedUser).getAccount_id()) + " is successfully sent and pending for approval.");
@@ -290,6 +290,15 @@ public class App {
          }
       }
       return valid;
+   }
+
+   private boolean idIsInUserList(List<User> users, int userId) {
+      for(User user: users) {
+         if(user.getId() == userId) {
+            return true;
+         }
+      }
+      return false;
    }
 
    /**
