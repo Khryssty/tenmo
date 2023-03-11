@@ -32,11 +32,7 @@ public class TransferServiceImplementation implements TransferService{
         this.userDao = userDao;
     }
 
-    /**
-     * Gets all transfers to and from the given id
-     * @param id given id
-     * @return list of all transfers
-     */
+
     @Override
     public List<Transfer> findAll(int id) {
         List<Transfer> transfers = null;
@@ -49,10 +45,7 @@ public class TransferServiceImplementation implements TransferService{
     }
 
 
-    /*
-     * 6. As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
-     * View transfer details using transfer_id
-     */
+
 
     @Override
     public Transfer getTransferById(int id) {
@@ -67,14 +60,7 @@ public class TransferServiceImplementation implements TransferService{
     }
 
 
-    /*
-     * 4. As an authenticated user of the system, I need to be able to *send* a transfer of a specific amount of TE Bucks to a registered user.
-     * 7. As an authenticated user of the system, I need to be able to *request* a transfer of a specific amount of TE Bucks from another registered user.
-     * @body transfer
-     * passes the account_from as user_id if it's sending a transfer
-     * passes the account_to as user_id if it's requesting for a transfer
-     */
-    @Override
+     @Override
     public Transfer sendTransfer(Transfer transfer) {
         Transfer createTransfer = null;
         try {
@@ -92,9 +78,6 @@ public class TransferServiceImplementation implements TransferService{
     }
 
 
-    /*
-     * 8. As an authenticated user of the system, I need to be able to see my *Pending* transfers.
-     */
 
     @Override
     public List<Transfer> viewPendingTransfer (int id) {
@@ -110,9 +93,7 @@ public class TransferServiceImplementation implements TransferService{
 
 
 
-    /*
-     *  9. As an authenticated user of the system, I need to be able to either approve or reject a Request Transfer.
-     */
+
 
     @Override
     public Transfer approveOrRejectTransfer(Transfer transfer,int id) {
