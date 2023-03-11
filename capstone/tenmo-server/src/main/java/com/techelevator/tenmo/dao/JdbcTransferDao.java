@@ -17,8 +17,7 @@ public class JdbcTransferDao implements TransferDao{
     }
 
 
-    /* TODO: Christy : need update
-    */
+
     @Override
     public List<Transfer> findAll(int id) {
         List<Transfer> transfers = new ArrayList<>();
@@ -36,7 +35,7 @@ public class JdbcTransferDao implements TransferDao{
 
     @Override
     public Transfer getTransferById(int transfer_id) {
-        Transfer transfer = new Transfer();
+        Transfer transfer = null;
         String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
                 "FROM transfer WHERE transfer_id = ?";
 
