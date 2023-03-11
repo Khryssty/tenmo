@@ -141,7 +141,6 @@ public class App {
     * @param isPending if true -> allow user to approve or reject
     */
    private void getTransferDetails(List<Transfer> transfers, int transferDetailsId, boolean isPending) {
-      displayCurrentUser();
       if(transferDetailsId != 0 && idIsInTransferList(transfers, transferDetailsId)) {
          Transfer transferToExamine = transferService.getTransferAtId(transferDetailsId);
          String toUsername = accountService.getUsernameByAccountId(transferToExamine.getAccount_to());

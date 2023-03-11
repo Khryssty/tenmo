@@ -1,14 +1,19 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Account {
 
     private int account_id;
-    @NotBlank(message = "User id should not be blank")
+
+    @Positive(message = "Please provide a valid user id")
     private int user_id;
+
+    @DecimalMin(value = "0", message = "Amount should be greater than 0")
     private BigDecimal balance;
 
     public Account() {

@@ -6,14 +6,21 @@ import java.math.BigDecimal;
 public class Transfer {
 
     private int transfer_id;
-    @NotNull(message = "Type of transfer should not be blank. Either 1 for SEND or 2 for REQUEST")
+
+    @Min(value = 1, message = "Either 1 for SEND or 2 for REQUEST")
+    @Max(value = 2, message = "Either 1 for SEND or 2 for REQUEST")
     private int transfer_type_id;
-    @NotNull(message = "Status of transfer should not be blank. 1 for PENDING or 2 for APPROVED or 3 for REJECTED")
+
+    @Min(value = 1, message = "Either 1 for PENDING, 2 for APPROVED or 3 for REJECTED")
+    @Max(value = 3, message = "Either 1 for PENDING, 2 for APPROVED or 3 for REJECTED")
     private int transfer_status_id;
-    @NotNull(message = "From account should not be blank")
+
+    @Positive(message = "Please provide a valid FROM account number")
     private int account_from;
-    @NotNull(message = "Destination account should not be blank")
+
+    @Positive(message = "Please provide a valid TO account number")
     private int account_to;
+
     @DecimalMin(value = "0", message = "Amount should be greater than 0")
     private BigDecimal amount;
 
