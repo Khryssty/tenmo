@@ -11,9 +11,5 @@ public interface AccountDao {
 
     Account getAccount(int account_id);
 
-//    void addToBalance(int account_id, BigDecimal amount);
-//
-//    void deductToBalance(int account_id, BigDecimal amount);
-
     void updateBalances(Transfer transfer);
 }

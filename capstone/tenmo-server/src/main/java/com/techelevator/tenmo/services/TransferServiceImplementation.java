@@ -2,10 +2,12 @@ package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransferDao;
+import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Transfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.EmptyStackException;
 import java.util.List;
 
@@ -21,10 +23,13 @@ public class TransferServiceImplementation implements TransferService{
 
     private TransferDao transferDao;
     private AccountDao accountDao;
+    private UserDao userDao;
+    private Principal authUser;
 
-    public TransferServiceImplementation(TransferDao transferDao, AccountDao accountDao) {
+    public TransferServiceImplementation(TransferDao transferDao, AccountDao accountDao, UserDao userDao) {
         this.transferDao = transferDao;
         this.accountDao = accountDao;
+        this.userDao = userDao;
     }
 
     /**
