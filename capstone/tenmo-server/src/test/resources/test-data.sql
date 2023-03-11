@@ -64,9 +64,9 @@ CREATE TABLE transfer (
 	CONSTRAINT CK_transfer_amount_gt_0 CHECK (amount > 0)
 );
 
-INSERT INTO transfer_status (transfer_status_desc) VALUES ('Pending');
-INSERT INTO transfer_status (transfer_status_desc) VALUES ('Approved');
-INSERT INTO transfer_status (transfer_status_desc) VALUES ('Rejected');
+INSERT INTO transfer_status (transfer_status_desc) VALUES ('Pending'); --1
+INSERT INTO transfer_status (transfer_status_desc) VALUES ('Approved'); --2
+INSERT INTO transfer_status (transfer_status_desc) VALUES ('Rejected'); --3
 
 INSERT INTO transfer_type (transfer_type_desc) VALUES ('Request');
 INSERT INTO transfer_type (transfer_type_desc) VALUES ('Send');

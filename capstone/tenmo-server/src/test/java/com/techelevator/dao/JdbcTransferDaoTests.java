@@ -95,6 +95,22 @@ public class JdbcTransferDaoTests extends BaseDaoTests{
         assertTransfersMatch(REQUEST_1, transfers.get(0));
     }
 
+    @Test
+    public void approveTransferShouldReturnStatusIdOfTwo() {
+        Transfer transfer = sut.approveTransfer(REQUEST_2, 3002);
+        Assert.assertTrue(transfer.getTransfer_status_id() == 2);
+
+        assertTransfersMatch(transfer, sut.getTransferById(3002));
+    }
+
+    @Test
+    public void rejectTransferShouldReturnStatusIdOfThree() {
+        Transfer transfer = sut.rejectTransfer(REQUEST_1, 3001);
+        Assert.assertTrue(transfer.getTransfer_status_id() == 3);
+
+        assertTransfersMatch(transfer, sut.getTransferById(3001));
+
+    }
 
     private void assertTransfersMatch(Transfer expected, Transfer actual) {
         Assert.assertEquals(expected.getTransfer_id(), actual.getTransfer_id());
