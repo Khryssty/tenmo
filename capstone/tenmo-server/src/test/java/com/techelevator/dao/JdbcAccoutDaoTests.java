@@ -24,7 +24,7 @@ public class JdbcAccoutDaoTests extends BaseDaoTests {
    public void assert_get_account_returns_correct_value() {
       Account balance = sut.getAccount(1001);
       System.out.println(balance.toString());
-      Assert.assertTrue(balance == account1);
+      Assert.assertEquals(balance.getBalance() ,account1.getBalance());
    }
 
    @Test
