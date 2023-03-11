@@ -59,19 +59,6 @@ public class JdbcTransferDao implements TransferDao{
         return getTransferById(transferId);
     }
 
-    /*
-    * TODO: Should be deleted later. Request transfer uses the sendTransfer method
-    */
-    @Override
-    public Transfer requestTransfer(Transfer transfer, int user_id) {
-        String sql = "INSERT INTO transfer(" +
-                "transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
-        Integer transferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getTransfer_type_id(), transfer.getTransfer_status_id(), transfer.getAccount_from(), transfer.getAccount_to(), transfer.getAmount());
-        return getTransferById(transferId);
-
-    }
-
     @Override
     public List<Transfer> viewPendingTransfers(int account_id) {
         List<Transfer> pendingTransfers = new ArrayList<>();
