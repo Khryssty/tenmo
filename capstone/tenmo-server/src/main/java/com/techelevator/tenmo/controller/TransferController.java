@@ -1,12 +1,15 @@
 package com.techelevator.tenmo.controller;
 
+import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.services.TransferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,9 +19,11 @@ import java.util.List;
 public class TransferController {
 
     private TransferService service;
+    private UserDao userDao;
 
-    public TransferController(TransferService service) {
+    public TransferController(TransferService service, UserDao userDao) {
         this.service = service;
+        this.userDao = userDao;
     }
 
     /**
@@ -27,7 +32,10 @@ public class TransferController {
      * @return list of all transfers
      */
     @RequestMapping(path = "/{id}/account", method = RequestMethod.GET)
-    public List<Transfer> findAll(@PathVariable int id) {
+    public List<Transfer> findAll(@PathVariable int id, Principal principal) {
+        if(userDao.findIdByUsername(principal.getName()) != id) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Logged in user does not have access");
+        }
         return service.findAll(id);
     }
 

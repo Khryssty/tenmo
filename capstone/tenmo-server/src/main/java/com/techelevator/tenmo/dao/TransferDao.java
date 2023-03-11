@@ -14,8 +14,6 @@ public interface TransferDao {
 
     Transfer sendTransfer(Transfer transfer);
 
-    Transfer requestTransfer(Transfer transfer, int user_id);
-
     List<Transfer> viewPendingTransfers(int transfer_status_id);
 
     Transfer approveTransfer(Transfer transfer, int transfer_id);
