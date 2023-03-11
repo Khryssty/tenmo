@@ -26,16 +26,6 @@ public class JdbcAccountDao implements AccountDao{
         }
     }
 
-//    @Override
-//    public void addToBalance(int account_id, BigDecimal amount) {
-//       jdbcTemplate.update("UPDATE account SET balance += ? WHERE account_id = ?", amount, account_id);
-//    }
-//
-//    @Override
-//    public void deductToBalance(int account_id, BigDecimal amount) {
-//        jdbcTemplate.update("UPDATE account SET balance -= ? WHERE account_id = ?", amount, account_id);
-//    }
-
     @Override
     public void updateBalances(Transfer transfer) {
         String sql = "START TRANSACTION;" +
@@ -50,7 +40,6 @@ public class JdbcAccountDao implements AccountDao{
         account.setAccount_id(rowSet.getInt("account_id"));
         account.setUser_id(rowSet.getInt("user_id"));
         account.setBalance(rowSet.getBigDecimal("balance"));
-
         return account;
     }
 }
