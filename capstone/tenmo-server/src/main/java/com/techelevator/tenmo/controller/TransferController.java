@@ -56,8 +56,8 @@ public class TransferController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST)
-    public Transfer sendTransfer(@Valid @RequestBody Transfer transfer) {
-
+    public Transfer sendTransfer(@Valid @RequestBody Transfer transfer, Principal principal) {
+        validateAuthenticatedUserByAccountId(getAccountIdOfUser(transfer),principal);
         return service.sendTransfer(transfer);
     }
 
@@ -101,7 +101,16 @@ public class TransferController {
         if (!passedUser.equals(whoAmI(principal))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Logged in user does not have access");
         }
+    }
 
+    private int getAccountIdOfUser(Transfer transfer) {
+        int account;
+        if (transfer.getTransfer_type_id() == 1) {
+            account = transfer.getAccount_to();
+        } else {
+            account = transfer.getAccount_from();
+        }
+        return account;
     }
 
 }
